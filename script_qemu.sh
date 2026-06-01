@@ -17,8 +17,6 @@ qemu-system-x86_64 \
     -m 3072 \
     -smp 2 \
     -hda "$DISK_PATH" \
-   # -cdrom "$ISO_PATH" \
-   # -boot d \
     -net nic,model=virtio \
     -net user,hostfwd=tcp::2222-:22 \
     -vnc :1
