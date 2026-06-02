@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ISO_PATH="/home/thi-phng/goinfre/ubuntu-26.04-live-server-amd64.iso"
+ISO_PATH="/home/thi-phng/goinfre/ubuntu-22.04.5-live-server-amd64.iso"
 DISK_PATH="/home/thi-phng/goinfre/IOT.qcow2"
 
 # 1. Tạo ổ đĩa ảo khoảng 15GB (thoải mái chứa các máy ảo con bên trong, file qcow2 ăn theo dung lượng thực tế nên không lo tốn 20GB ngay lập tức)
@@ -17,10 +17,7 @@ qemu-system-x86_64 \
     -m 3072 \
     -smp 2 \
     -hda "$DISK_PATH" \
-    # -cdrom "$ISO_PATH" \ #to install OS from ISO
-    # -boot d \ #boot from CD-ROM to install OS
-    -device virtio-net-pci, netdev=mynet0 \
-    -netdev user,id=mynet0, hostfwd=tcp:127.0.0.1:4245-:22\
+    -net nic,model=virtio \
+    -net user,hostfwd=tcp::2222-:22 \
     -vnc :1
-# vncviewer localhost:1 -> in a new terminal
 
