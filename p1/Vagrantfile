@@ -1,32 +1,24 @@
-grant.configure("2") do |config|
-  # Using light Alpine box for Libvirt
-  config.vm.box = "generic/alpine319"
-  
-  config.vm.provider :libvirt do |libvirt|
-    libvirt.driver = "kvm"
-    libvirt.cpus = 1
-    libvirt.memory = 512
+Vagrant.configure("2") do |config|
+  config.vm.box = "generic/ubuntu2204"
+  config.vm.box_check_update = false
+
+  # Config hardware for libvirt
+  config.vm.provider "libvirt" do |lv|
+    lv.memory = 1024
+    lv.cpus = 1
   end
 
-  # ==========================================
-  # Machine 1: SERVER (MASTER)
-  # ==========================================
+  # Machine 1: Server
   config.vm.define "thi-phngS" do |server|
     server.vm.hostname = "thi-phngS"
-    server.vm.network "private_network", ip: "192.168.56.110", libvirt__dhcp_enabled: false
-    
-    # Call file script to install K3s Server from folder scripts
-    server.vm.provision "shell", path: "scripts/setup_server.sh"
+    server.vm.network "private_network", ip: "192.168.56.110"
+    server.vm.provision "shell", path: "scripts/server.sh"
   end
 
-  # ==========================================
-  # Machine 2: SERVERWORKER (AGENT)
-  # ==========================================
+  # Machine 2: Worker
   config.vm.define "thi-phngSW" do |worker|
     worker.vm.hostname = "thi-phngSW"
-    worker.vm.network "private_network", ip: "192.168.56.111", libvirt__dhcp_enabled: false
-
-    # Call file script to install K3s Agent from folder scripts
-    worker.vm.provision "shell", path: "scripts/setup_worker.sh"
+    worker.vm.network "private_network", ip: "192.168.56.111"
+    worker.vm.provision "shell", path: "scripts/worker.sh"
   end
 end
