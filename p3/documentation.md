@@ -19,13 +19,13 @@ GitHub repo (deployment.yaml) ──sync──▶ Argo CD ──deploy──▶ 
 ```
 p3/
 ├── scripts/
-│   └── install.sh    # installs Docker, K3d, kubectl, Argo CD
+│   └── setup.sh    # installs Docker, K3d, kubectl, Argo CD
 └── confs/
-    ├── deployment.yaml    # app manifest (tracked by Argo CD via GitHub)
-    └── argocd-app.yaml    # tells Argo CD where to sync from
+  ├── deployment.yaml    # app manifest (tracked by Argo CD via GitHub)
+  └── argocd-app.yaml    # tells Argo CD where to sync from
 ```
 
-### install.sh — step by step
+### setup.sh — step by step
 ```bash
 # 1. Install Docker
 curl -fsSL https://get.docker.com | sh
@@ -39,8 +39,9 @@ chmod +x kubectl && sudo mv kubectl /usr/local/bin/
 # 3. Install K3d (K3s inside Docker containers)
 curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
 
-# 4. Create K3d cluster with port forwarding
-k3d cluster create iot-cluster \
+# 4. Create K3d cluster with port forwarding (optional)
+# Note: `scripts/setup.sh` creates a cluster named `iot` by default.
+k3d cluster create iot \
   --port "8888:30888@loadbalancer"
 # host:8888 → loadbalancer → NodePort:30888 → container:8888
 

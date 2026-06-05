@@ -4,6 +4,11 @@
 set -euo pipefail
 
 CLUSTER_NAME="${CLUSTER_NAME:-iot}"
+PORT_MAPPING="${PORT_MAPPING:-8888:30888@loadbalancer}"
+
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+ARGOCD_APP_FILE="$DIR/../confs/argocd-app.yaml"
 
 log() { printf '\033[1;34m==>\033[0m %s\n' "$*"; }
 ok()  { printf '\033[1;32m[ok]\033[0m %s\n' "$*"; }
@@ -49,11 +54,51 @@ fi
 if k3d cluster get "$CLUSTER_NAME" >/dev/null 2>&1; then
   ok "Cluster '$CLUSTER_NAME' déjà présent"
 else
-  log "Création du cluster '$CLUSTER_NAME'"
-  k3d cluster create "$CLUSTER_NAME"
+  log "Création du cluster '$CLUSTER_NAME' (port: $PORT_MAPPING)"
+  k3d cluster create "$CLUSTER_NAME" --port "$PORT_MAPPING"
   ok "Cluster '$CLUSTER_NAME' créé"
 fi
 
 log "Vérification"
 kubectl get nodes
 ok "Cluster '$CLUSTER_NAME' prêt."
+
+# Namespaces
+if kubectl get namespace argocd >/dev/null 2>&1; then
+  ok "Namespace 'argocd' déjà présent"
+else
+  log "Création namespace 'argocd'"
+  kubectl create namespace argocd
+  ok "Namespace 'argocd' créé"
+fi
+
+if kubectl get namespace dev >/dev/null 2>&1; then
+  ok "Namespace 'dev' déjà présent"
+else
+  log "Création namespace 'dev'"
+  kubectl create namespace dev
+  ok "Namespace 'dev' créé"
+fi
+
+# Install Argo CD (idempotent)
+if kubectl -n argocd get deployment argocd-server >/dev/null 2>&1; then
+  ok "Argo CD déjà installé"
+else
+  log "Installation de Argo CD"
+  kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+  ok "Manifests Argo CD appliqués"
+
+  log "Attente Argo CD prêt (server pod)"
+  kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=argocd-server -n argocd --timeout=300s
+  ok "Argo CD server prêt"
+
+  log "Argocd admin password:"
+  kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d || true
+fi
+
+# Apply local Argo CD Application manifest if present
+if [ -f "$ARGOCD_APP_FILE" ]; then
+  log "Apply Argo CD Application: $ARGOCD_APP_FILE"
+  kubectl apply -f "$ARGOCD_APP_FILE"
+  ok "Argo CD Application applied"
+fi
