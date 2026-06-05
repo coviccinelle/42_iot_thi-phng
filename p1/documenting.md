@@ -1,13 +1,16 @@
-setup:
-Fedora (host) → QEMU/KVM → Ubuntu 22.04 VM → Vagrant + VirtualBox → các VM của project
-=> this is nested virtualization (VM in VM)
+# Part 1 — K3s and Vagrant
 
+## Purpose
+Provide reproducible Vagrant configurations and scripts to provision one or more VMs that run a lightweight K3s Kubernetes cluster for local experimentation.
 
-before:
-export VAGRANT_HOME=/home/thi-phng/goinfre/.vagrant.d
-source ~/.zshrc
+## Prerequisites
+- Vagrant
+- A supported provider (VirtualBox or similar)
+- `ssh` available in the shell
 
-
+```bash
+export VAGRANT_HOME=/home/$USER/goinfre/.vagrant.d
+```
 
 Script to verify:
 ```bash

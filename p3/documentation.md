@@ -1,19 +1,13 @@
+# Part 3 — K3d and Argo CD
+
+## Purpose
+Demonstrate running a Kubernetes cluster inside Docker using K3d and manage deployments using Argo CD to show a GitOps workflow.
+
 How to install k3d without sudo rights:
 
 ```bash
 mkdir -p "$HOME/.local/bin" curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | USE_SUDO=false K3D_INSTALL_DIR="$HOME/.local/bin" bash
 ```
-
-# Inception-of-Things (IoT) — Project Documentation
-
-> K3s + K3d + Argo CD on Vagrant/KVM  
-> Stack: Fedora host → QEMU/KVM → Ubuntu 22.04 VM → Vagrant VMs
-
----
-
-## Part 3 — K3d + Argo CD (GitOps CI/CD)
-
-**Goal:** K3d cluster + Argo CD watches a GitHub repo and auto-deploys app on every push.
 
 ```
 GitHub repo (deployment.yaml) ──sync──▶ Argo CD ──deploy──▶ dev namespace

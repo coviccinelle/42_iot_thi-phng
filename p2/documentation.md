@@ -1,3 +1,8 @@
+# Part 2 — K3s and Three Simple Applications
+
+## Purpose
+Deploy three minimal sample applications to the K3s cluster to demonstrate basic Kubernetes resources, service exposure via Ingress, and application structure.
+
 ## Requirements
 
 ```bash

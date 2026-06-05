@@ -1,10 +1,21 @@
 # 42_inception_of_things
+ 
+## Project summary
+This project is a hands-on exercise for deploying and operating lightweight Kubernetes clusters (K3s / K3d), integrating Argo CD for GitOps-style application delivery, and using Vagrant-based virtual machines for environment isolation. It is intended to teach how to configure, deploy, and manage cloud-native applications across different local environments.
 
+Main goals:
+- Set up lightweight Kubernetes clusters using K3s (via Vagrant VMs) and K3d (in Docker).
+- Deploy three simple sample applications and verify ingress routing.
+- Configure Argo CD to manage application deployments following GitOps principles.
+
+## Basic explanation (main parts)
+- Part 1: K3s and Vagrant — Vagrantfiles and VM configuration to provision VMs that run K3s.
+- Part 2: K3s and three simple applications — Kubernetes manifests, ingress configuration, and resources to deploy three sample apps.
+- Part 3: K3d and Argo CD — use K3d to run clusters in Docker and demonstrate Argo CD for automated deployments.
 
 ## Dictionary
 - Ingress: an API object that manages external access to the services in a cluster, typically HTTP.
 - Vagrant: is the command-line utility for managing the lifecycle of virtual machines. Isolate dependencies and their configuration within a single disposable and consistent environment -> like VirtualBox, but without a graphical interface.
-- 
 
 ## Part 1: K3s and Vagrant
 
