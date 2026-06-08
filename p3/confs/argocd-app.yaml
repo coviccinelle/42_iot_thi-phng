@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/coviccinelle/42_inception_of_things
+    repoURL: https://github.com/coviccinelle/42_iot_thi-phng
     targetRevision: HEAD
     path: p3/confs
   destination:
