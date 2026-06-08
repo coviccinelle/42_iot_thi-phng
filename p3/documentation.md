@@ -111,7 +111,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/coviccinelle/42_inception_of_things
+    repoURL: https://github.com/coviccinelle/42_iot_thi-phng
     targetRevision: HEAD      # always track latest commit
     path: p3/confs            # folder containing deployment.yaml
   destination:
@@ -126,7 +126,7 @@ spec:
 ```
 
 ```bash
-kubectl apply -f ~/ iot/p3/confs/argocd-app.yaml   # register app with Argo CD
+kubectl apply -f ~/iot/p3/confs/argocd-app.yaml   # register app with Argo CD
 ```
 
 ### Verify & test
@@ -142,7 +142,7 @@ kubectl -n argocd get app wil-playground   # STATUS=Synced, HEALTH=Healthy
 ### Update v1 → v2 (the CI/CD demo)
 ```bash
 # 1. Change image tag in deployment.yaml
-sed -i 's/wil42\/playground:v1/wil42\/playground:v2/' p3/confs/deployment.yaml
+sed -i 's/wil42\/playground:v1/wil42\/playground:v2/' ~/iot/p3/confs/deployment.yaml
 
 # 2. Push to GitHub → Argo CD detects change and redeploys
 git add p3/confs/deployment.yaml
